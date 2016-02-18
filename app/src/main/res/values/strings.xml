@@ -70,6 +70,10 @@
     <string name="security_type_label_text">Security Type</string>
     <string name="submit_button_text">Submit</string>
     <string name="show_password">Show Password</string>
+    <string name="nodevice">There are no ZIP devices within range.</string>
+    <string name="button_scan">Scan</string>
+    <string name="image">Image</string>
+    <string name="wifi_name_prefix">wifi_name_prefix</string>
     <string-array name="test_wifi_names">
         <item>Shuttle Badminton</item>
         <item>Tennis</item>

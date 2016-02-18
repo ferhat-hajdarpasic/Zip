@@ -4,7 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.wifi.ScanResult;
+import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,7 +31,7 @@ import java.util.List;
 
 import whitespider.com.ziptest.R;
 
-public class ConfigureWiFiActivity extends AppCompatActivity {
+public class ConfigureWiFiActivity extends AppCompatActivity implements IConfigureWiFiActivity {
     public static final String CONFIGURE_WIFI_EVENT = "configure-wifi-event";
     public static final String CONFIGURE_WFI_RESULT_MESSAGE = "CONFIGURE_WFI_RESULT_MESSAGE";
     private ArrayAdapter<WiFiContent.WiFiItem> arrayAdapter;
@@ -172,15 +174,19 @@ public class ConfigureWiFiActivity extends AppCompatActivity {
                 new IntentFilter(CONFIGURE_WIFI_EVENT));
     }
 
+    @Override
     public void refreshWiFiList(List<ScanResult> mScanResults) {
+        String wiFiNamePrefix = getStringPreference(R.string.wifi_name_prefix);
         List<WiFiContent.WiFiItem> wiFiNetworks = new ArrayList<WiFiContent.WiFiItem>();
         for(int i = 0; i < mScanResults.size(); i++){
             final ScanResult scanResult = mScanResults.get(i);
             Log.i("BSSID", scanResult.BSSID + ". ");
             Log.i("SSID", scanResult.SSID);
             Log.i("capabilities", scanResult.capabilities);
-            WiFiContent.WiFiItem item = new WiFiContent.WiFiItem(scanResult.BSSID, scanResult.SSID, scanResult.capabilities);
-            wiFiNetworks.add(item);
+            if(!scanResult.SSID.toLowerCase().startsWith(wiFiNamePrefix.toLowerCase())) {
+                WiFiContent.WiFiItem item = new WiFiContent.WiFiItem(scanResult.BSSID, scanResult.SSID, scanResult.capabilities);
+                wiFiNetworks.add(item);
+            }
         }
 
         arrayAdapter.addAll(wiFiNetworks);
@@ -240,5 +246,10 @@ public class ConfigureWiFiActivity extends AppCompatActivity {
     protected void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
         super.onDestroy();
+    }
+    public String getStringPreference(int preferenceId) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String preferenceValue = this.getResources().getString(preferenceId);
+        return sharedPrefs.getString(preferenceValue, "");
     }
 }

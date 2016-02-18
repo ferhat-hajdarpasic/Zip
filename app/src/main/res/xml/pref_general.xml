@@ -26,6 +26,14 @@
         android:singleLine="true"
         android:title="@string/pref_router_port" />
 
+    <EditTextPreference
+        android:key="@string/wifi_name_prefix"
+        android:summary="WiFi network name starts with"
+        android:defaultValue="BigPond"
+        android:inputType="text"
+        android:persistent="true"
+        android:title="WiFi domain prefix"/>
+
     <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
          dismiss it. -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->

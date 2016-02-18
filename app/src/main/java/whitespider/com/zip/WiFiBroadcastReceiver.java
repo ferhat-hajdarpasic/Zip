@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WiFiBroadcastReceiver extends BroadcastReceiver {
-    private ConfigureWiFiActivity activity;
+    private Activity activity;
     public WiFiBroadcastReceiver(Activity activity) {
-        this.activity = (ConfigureWiFiActivity)activity;
+        this.activity = activity;
         activity.registerReceiver(this, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         WifiManager mWifiManager = (WifiManager) activity.getSystemService(Context.WIFI_SERVICE);
         mWifiManager.startScan();
@@ -35,7 +35,7 @@ public class WiFiBroadcastReceiver extends BroadcastReceiver {
                 WiFiContent.WiFiItem item = new WiFiContent.WiFiItem(scanResult.BSSID, scanResult.SSID, scanResult.capabilities);
                 wiFiNetworks.add(item);
             }
-            activity.refreshWiFiList(mScanResults);
+            ((IConfigureWiFiActivity)activity).refreshWiFiList(mScanResults);
         }
     }
 }

@@ -1,35 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="whitespider.com.zip.MainActivity"
-    android:background="@mipmap/zip_logo_home">
+    android:weightSum="1">
 
-    <android.support.design.widget.AppBarLayout
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="50dp"
+        android:layout_gravity="top"
+        android:contentDescription="@string/image"
+        android:gravity="center"
+        android:src="@mipmap/zip_logo_home" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_main" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="323dp"
+        android:id="@+id/device_list" />
+    <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_input_add" />
+        android:id="@+id/wifiCollectProgressBar"
+        android:layout_gravity="center" />
 
-</android.support.design.widget.CoordinatorLayout>
+    <Button
+        android:id="@+id/btn_scan"
+        android:drawableLeft="@drawable/ic_action_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:fadingEdge="vertical"
+        android:gravity="center_horizontal|center"
+        android:linksClickable="false"
+        android:onClick="onBtnScan"
+        android:padding="10dp"
+        android:text="@string/button_scan" android:textColor="#fff" />
+</LinearLayout>
