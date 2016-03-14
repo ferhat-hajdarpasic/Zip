@@ -154,7 +154,8 @@
                         android:inputType="textPassword"
                         android:ems="10"
                         android:id="@+id/editPasswordText"
-                        android:password="false" />
+                        android:password="false"
+                        android:editable="true" />
 
                 </TableRow>
 

@@ -1,8 +1,6 @@
 <resources>
-    <string name="app_name">ZIP</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_config_wifi">WiFi</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="app_name">Zip Wi-Fi Configurator</string>
+    <string name="action_config_wifi">Config</string>
 
     <!-- Strings related to Settings -->
 
@@ -15,9 +13,9 @@
     </string>
 
     <string name="pref_router_hostname">Hostname</string>
-    <string name="pref_default_hostname">192.168.0.7</string>
+    <string name="pref_default_hostname">192.168.1.1</string>
     <string name="pref_router_port">Port</string>
-    <string name="pref_default_port">9080</string>
+    <string name="pref_default_port">9001</string>
 
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
@@ -68,12 +66,16 @@
     <string name="wifi_domains_label_text">WiFi Domains</string>
     <string name="password_label_text">Password</string>
     <string name="security_type_label_text">Security Type</string>
-    <string name="submit_button_text">Submit</string>
+    <string name="submit_button_text">Configure Wi-Fi</string>
     <string name="show_password">Show Password</string>
     <string name="nodevice">There are no ZIP devices within range.</string>
     <string name="button_scan">Scan</string>
     <string name="image">Image</string>
     <string name="wifi_name_prefix">wifi_name_prefix</string>
+    <string name="wifi_password">wifi_password</string>
+    <string name="zip_saved_password">zip_saved_password</string>
+    <string name="zip_config_password">zip_config_password</string>
+    <string name="zip_wifi_password">zip_wifi_password</string>
     <string-array name="test_wifi_names">
         <item>Shuttle Badminton</item>
         <item>Tennis</item>

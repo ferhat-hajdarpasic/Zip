@@ -76,5 +76,24 @@ public class WiFiContent {
         public String toString() {
             return ssid;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            } else {
+                if (o == null || getClass() != o.getClass()) {
+                    return false;
+                } else {
+                    WiFiItem wiFiItem = (WiFiItem) o;
+                    return ssid.equals(wiFiItem.ssid);
+                }
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            return ssid.hashCode();
+        }
     }
 }

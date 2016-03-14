@@ -43,8 +43,8 @@ public class TcpCommunicationIntentService  extends IntentService {
 
     private void sendWiFiCommand(ConfigureWiFiCommand command) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String routerHostname = prefs.getString("router_hostname", "");
-        int routerPort = Integer.valueOf(prefs.getString("router_port", "0"));
+        String routerHostname = prefs.getString("router_hostname", "192.168.1.1");
+        int routerPort = Integer.valueOf(prefs.getString("router_port", "9001"));
 
         SocketAddress sockaddr = new InetSocketAddress(routerHostname, routerPort);
 

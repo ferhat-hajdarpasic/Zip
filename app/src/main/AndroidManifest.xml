@@ -22,10 +22,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="whitespider.com.zip.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:theme="@style/Theme.AppCompat"/>
-        <activity
             android:name="whitespider.com.zip.ConfigureWiFiActivity"
             android:theme="@style/Theme.AppCompat"/>
 

@@ -5,13 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.wifi.ScanResult;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -37,7 +42,7 @@ public class ConfigureWiFiActivity extends AppCompatActivity implements IConfigu
     private ArrayAdapter<WiFiContent.WiFiItem> arrayAdapter;
     private ListView wiFiDomainsListView;
     private TextView hiddenDomain;
-    private TextView wiFiPassword;
+    private EditText wiFiPassword;
     private RadioButton radioButtonSecurityTypeOpen;
     private RadioButton radioButtonSecurityTypeWep;
     private RadioButton radioButtonSecurityTypeWpa;
@@ -51,12 +56,13 @@ public class ConfigureWiFiActivity extends AppCompatActivity implements IConfigu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configure_wi_fi);
-        BroadcastReceiver mWifiScanReceiver = new WiFiBroadcastReceiver(this);
+        WiFiBroadcastReceiver mWifiScanReceiver = new WiFiBroadcastReceiver(this);
+        mWifiScanReceiver.startScan();
         arrayAdapter =new ArrayAdapter<WiFiContent.WiFiItem>(this.getApplicationContext(),
                         android.R.layout.simple_list_item_checked);
         wiFiDomainsListView = (ListView)this.findViewById(R.id.wiFiDomainsListView);
         hiddenDomain = (TextView) this.findViewById(R.id.editHiddenDomainText);
-        wiFiPassword = (TextView) this.findViewById(R.id.editPasswordText);
+        createAndInitConfigPassword();
         radioButtonSecurityTypeOpen = (RadioButton)this.findViewById(R.id.securityTypeOpen);
         radioButtonSecurityTypeWep = (RadioButton)this.findViewById(R.id.securityTypeWep);
         radioButtonSecurityTypeWpa = (RadioButton)this.findViewById(R.id.securityTypeWpa);
@@ -174,9 +180,31 @@ public class ConfigureWiFiActivity extends AppCompatActivity implements IConfigu
                 new IntentFilter(CONFIGURE_WIFI_EVENT));
     }
 
+    private void createAndInitConfigPassword() {
+        wiFiPassword = (EditText) this.findViewById(R.id.editPasswordText);
+        final String key = getKey(R.string.zip_config_password);
+        String password = PreferenceManager.getDefaultSharedPreferences(this).getString(key, "");
+        wiFiPassword.setText(password);
+    }
+
+    @NonNull
+    private String getKey(int zip_config_password) {
+        Resources res = getResources();
+        return res.getString(zip_config_password);
+    }
+
+    private boolean saveNewConfigPasswordValue(TextView wiFiPassword) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = settings.edit();
+        Resources res = getResources();
+        final String key = getKey(R.string.zip_config_password);
+        editor.putString(key, wiFiPassword.getText().toString());
+        return editor.commit();
+    }
+
     @Override
     public void refreshWiFiList(List<ScanResult> mScanResults) {
-        String wiFiNamePrefix = getStringPreference(R.string.wifi_name_prefix);
+        String wiFiNamePrefix = getStringPreference(R.string.wifi_name_prefix, "ZIP-");
         List<WiFiContent.WiFiItem> wiFiNetworks = new ArrayList<WiFiContent.WiFiItem>();
         for(int i = 0; i < mScanResults.size(); i++){
             final ScanResult scanResult = mScanResults.get(i);
@@ -214,6 +242,7 @@ public class ConfigureWiFiActivity extends AppCompatActivity implements IConfigu
         } else {
             wiFiPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
+        wiFiPassword.setSelection(wiFiPassword.getText().length());
     }
 
     public void submit(View view) {
@@ -240,6 +269,7 @@ public class ConfigureWiFiActivity extends AppCompatActivity implements IConfigu
 
         broadcastProgressBar.setVisibility(View.VISIBLE);
 
+        saveNewConfigPasswordValue(wiFiPassword);
     }
 
     @Override
@@ -247,9 +277,9 @@ public class ConfigureWiFiActivity extends AppCompatActivity implements IConfigu
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }
-    public String getStringPreference(int preferenceId) {
+    public String getStringPreference(int preferenceId, String defaultValue) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String preferenceValue = this.getResources().getString(preferenceId);
-        return sharedPrefs.getString(preferenceValue, "");
+        String preferenceValue = getKey(preferenceId);
+        return sharedPrefs.getString(preferenceValue, defaultValue);
     }
 }

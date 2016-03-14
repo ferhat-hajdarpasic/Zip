@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
@@ -16,10 +17,18 @@ public class WiFiBroadcastReceiver extends BroadcastReceiver {
     private Activity activity;
     public WiFiBroadcastReceiver(Activity activity) {
         this.activity = activity;
+    }
+
+    public void startScan() {
         activity.registerReceiver(this, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         WifiManager mWifiManager = (WifiManager) activity.getSystemService(Context.WIFI_SERVICE);
         mWifiManager.startScan();
     }
+
+    public void stopScan() {
+        activity.unregisterReceiver(this);
+    }
+
     @Override
     public void onReceive(Context c, Intent intent) {
         if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {

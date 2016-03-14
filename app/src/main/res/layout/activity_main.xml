@@ -16,7 +16,7 @@
         android:gravity="center"
         android:src="@mipmap/zip_logo_home" />
 
-    <ListView
+    <whitespider.com.zip.WiFiNetworksListView
         android:layout_width="wrap_content"
         android:layout_height="323dp"
         android:id="@+id/device_list" />
