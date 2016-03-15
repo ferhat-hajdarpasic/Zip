@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements IConfigureWiFiAct
         wifiCollectProgressBar = (ProgressBar)findViewById(R.id.wifiCollectProgressBar);
 
         mWiFiNetworksListView.setOnItemClickListener(mDeviceClickListener);
-        mWifiScanReceiver = new WiFiBroadcastReceiver(this);
+        mWifiScanReceiver = new WiFiBroadcastReceiver(this, this);
 
         mBtnScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements IConfigureWiFiAct
             }
         });
 
-        connectCode = new WiFiConnectCode(this);
+        connectCode = null; //new WiFiConnectCode(this);
         startScan();
     }
 
@@ -78,6 +78,10 @@ public class MainActivity extends AppCompatActivity implements IConfigureWiFiAct
             return true;
         }
 
+        if (id == R.id.action_info) {
+            startActivity(new Intent(this, InfoActivity.class));
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

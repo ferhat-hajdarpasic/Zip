@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="whitespider.com.zip.ConfigureWiFiActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scrollView2"
+            android:layout_weight="1.80">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/wifi_domains_label_text"
+                        android:id="@+id/labelWiFiDomains" />
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="160dp">
+
+                        <ListView
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/wiFiDomainsListView"
+                            android:entries="@array/test_wifi_names"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:choiceMode="singleChoice"
+                            android:fastScrollAlwaysVisible="true"
+                            android:nestedScrollingEnabled="true"
+                            android:listSelector="@android:drawable/divider_horizontal_textfield"
+                            android:drawSelectorOnTop="false"
+                            android:headerDividersEnabled="false"
+                            android:footerDividersEnabled="false"
+                            android:longClickable="true"
+                            android:visibility="visible" />
+
+                        <ProgressBar
+                            style="?android:attr/progressBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/wifiCollectProgressBar"
+                            android:layout_gravity="center"
+                            android:visibility="visible" />
+                    </FrameLayout>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hidden_domain_label_text"
+                        android:id="@+id/hiddenDomainLabel"
+                        android:labelFor="@+id/editHiddenDomainText" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/editHiddenDomainText"
+                        android:inputType="text"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="110dp"
+                        android:text="@string/security_type_label_text"
+                        android:id="@+id/securityTypeLabel"
+                        android:labelFor="@+id/securityTypeListView" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_column="1">
+
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="110dp"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true">
+
+                            <RadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Open"
+                                android:id="@+id/securityTypeOpen"
+                                android:checked="false" />
+
+                            <RadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="WPA/WPA2"
+                                android:id="@+id/securityTypeWpa"
+                                android:checked="false" />
+
+                            <RadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="WEP"
+                                android:id="@+id/securityTypeWep"
+                                android:checked="false" />
+                        </RadioGroup>
+                    </LinearLayout>
+
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/password_label_text"
+                        android:id="@+id/passwordLabel"
+                        android:labelFor="@+id/editPasswordText" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:ems="10"
+                        android:id="@+id/editPasswordText"
+                        android:password="false"
+                        android:editable="true" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/show_password"
+                        android:id="@+id/checkBoxShowPassword"
+                        android:layout_column="1"
+                        android:checked="false"
+                        android:clickable="true"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent">
+                    <Button
+                        android:layout_width="fill_parent"
+                        android:layout_height="40dp"
+                        android:text="@string/submit_button_text"
+                        android:id="@+id/submitButton"
+                        android:clickable="true"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:layout_column="1" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent">
+                    <ProgressBar
+                        style="?android:attr/progressBarStyleSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:id="@+id/broadcastProgressBar"
+                        android:visibility="gone" />
+
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,5 +1,6 @@
 package whitespider.com.zip;
 
+import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,12 +9,9 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.support.v7.widget.AppCompatTextView;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -22,18 +20,18 @@ import whitespider.com.ziptest.R;
 public class WiFiConnectCode {
     private static final String TAG = "WiFiConnectCode";
     private final WiFiNetworksListView mWiFiNetworksListView;
-    private MainActivity mActivity;
+    private Fragment mFragment;
     private WiFiContent.WiFiItem wiFiItem;
     private NetworkChangedReceiver networkChangedReceiver;
     private ProgressBar connectProgressBar;
 
-    public WiFiConnectCode(MainActivity activity) {
-        mActivity = activity;
-        connectProgressBar = (ProgressBar)activity.findViewById(R.id.wifiCollectProgressBar);
-        mWiFiNetworksListView = (WiFiNetworksListView)activity.findViewById(R.id.device_list);
+    public WiFiConnectCode(Fragment fragment, ProgressBar progressBar, WiFiNetworksListView wiFiNetworksListView) {
+        mFragment = fragment;
+        connectProgressBar = progressBar;
+        mWiFiNetworksListView = wiFiNetworksListView;
     }
     public void connect(WiFiContent.WiFiItem wiFiItem, String wiFiPassword, View view) {
-        WifiManager mWifiManager = (WifiManager) mActivity.getSystemService(Context.WIFI_SERVICE);
+        WifiManager mWifiManager = (WifiManager) mFragment.getActivity().getSystemService(Context.WIFI_SERVICE);
         final WifiInfo connectionInfo = mWifiManager.getConnectionInfo();
         if(connectionInfo.getSSID().equals(wiFiItem.ssid)) {
             Log.d(TAG, "Already connected to : " + connectionInfo);
@@ -41,12 +39,12 @@ public class WiFiConnectCode {
             connectProgressBar.setVisibility(View.VISIBLE);
             this.wiFiItem = wiFiItem;
             if (networkChangedReceiver != null) {
-                mActivity.unregisterReceiver(networkChangedReceiver);
+                mFragment.getActivity().unregisterReceiver(networkChangedReceiver);
             }
 
             networkChangedReceiver = new NetworkChangedReceiver(this.wiFiItem, wiFiPassword, view);
-            mActivity.registerReceiver(networkChangedReceiver, new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION));
-            mActivity.registerReceiver(networkChangedReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+            mFragment.getActivity().registerReceiver(networkChangedReceiver, new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION));
+            mFragment.getActivity().registerReceiver(networkChangedReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
             mWiFiNetworksListView.setConnectedWiFiItem(this.wiFiItem);
 
             disconnectAP();
@@ -54,7 +52,7 @@ public class WiFiConnectCode {
     }
 
     private void connectAP(WiFiContent.WiFiItem wiFiItem, String networkPass) {
-        WifiManager wifiManager = (WifiManager) mActivity.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) mFragment.getActivity().getSystemService(Context.WIFI_SERVICE);
         WifiConfiguration config = new WifiConfiguration();
         config.SSID = convertToQuotedString(wiFiItem.ssid);
         config.preSharedKey = convertToQuotedString(networkPass); //String.format("\"{0}\"", networkPass);
@@ -80,7 +78,7 @@ public class WiFiConnectCode {
     }
 
     public boolean disconnectAP() {
-        WifiManager wifiManager = (WifiManager) mActivity.getSystemService(Context.WIFI_SERVICE);
+        WifiManager wifiManager = (WifiManager) mFragment.getActivity().getSystemService(Context.WIFI_SERVICE);
         if (wifiManager.isWifiEnabled()) {
             //remove the current network Id
             WifiInfo curWifi = wifiManager.getConnectionInfo();
@@ -107,7 +105,7 @@ public class WiFiConnectCode {
 
     public void refreshConnectionDisplay(List<WiFiContent.WiFiItem> filteredWiFiNetworks) {
         boolean stateSet = false;
-        WifiManager mWifiManager = (WifiManager) mActivity.getSystemService(Context.WIFI_SERVICE);
+        WifiManager mWifiManager = (WifiManager) mFragment.getActivity().getSystemService(Context.WIFI_SERVICE);
         final WifiInfo connectionInfo = mWifiManager.getConnectionInfo();
         for (WiFiContent.WiFiItem wiFiItem : filteredWiFiNetworks) {
             final String connectionInfoSSID = removeQuotedString(connectionInfo.getSSID());
@@ -138,7 +136,7 @@ public class WiFiConnectCode {
                 NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
                 Log.v(TAG, "mWifiNetworkInfo: " + networkInfo.toString());
                 Log.v(TAG, "mWifiNetworkInfo.getExtraInfo: " + networkInfo.getExtraInfo());
-                WifiManager mWifiManager = (WifiManager) mActivity.getSystemService(Context.WIFI_SERVICE);
+                WifiManager mWifiManager = (WifiManager) mFragment.getActivity().getSystemService(Context.WIFI_SERVICE);
                 final WifiInfo connectionInfo = mWifiManager.getConnectionInfo();
                 Log.d(TAG, "connectionInfo=" + connectionInfo);
                 if(networkInfo.getExtraInfo().contains(wiFiItem.ssid)) {

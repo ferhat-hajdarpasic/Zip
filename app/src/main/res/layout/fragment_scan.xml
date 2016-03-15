@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="whitespider.com.zip.MainActivity"
+    android:weightSum="1">
+    <whitespider.com.zip.WiFiNetworksListView
+        android:layout_width="wrap_content"
+        android:layout_height="323dp"
+        android:id="@+id/device_list" />
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/wifiCollectProgressBar"
+        android:layout_gravity="center" />
+
+    <Button
+        android:id="@+id/btn_scan"
+        android:drawableLeft="@drawable/ic_action_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:fadingEdge="vertical"
+        android:gravity="center_horizontal|center"
+        android:linksClickable="false"
+        android:onClick="onBtnScan"
+        android:padding="10dp"
+        android:text="@string/button_scan" android:textColor="#fff" />
+</LinearLayout>
+

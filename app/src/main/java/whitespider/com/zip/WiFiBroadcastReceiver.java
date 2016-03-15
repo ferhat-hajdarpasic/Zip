@@ -14,9 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WiFiBroadcastReceiver extends BroadcastReceiver {
+    private final IConfigureWiFiActivity iConfigureWiFiActivity;
     private Activity activity;
-    public WiFiBroadcastReceiver(Activity activity) {
+    public WiFiBroadcastReceiver(Activity activity, IConfigureWiFiActivity iConfigureWiFiActivity) {
         this.activity = activity;
+        this.iConfigureWiFiActivity = iConfigureWiFiActivity;
     }
 
     public void startScan() {
@@ -26,7 +28,11 @@ public class WiFiBroadcastReceiver extends BroadcastReceiver {
     }
 
     public void stopScan() {
+        try {
         activity.unregisterReceiver(this);
+        } catch (RuntimeException e) {
+            //Ignore errors unregistering
+        }
     }
 
     @Override
@@ -44,7 +50,7 @@ public class WiFiBroadcastReceiver extends BroadcastReceiver {
                 WiFiContent.WiFiItem item = new WiFiContent.WiFiItem(scanResult.BSSID, scanResult.SSID, scanResult.capabilities);
                 wiFiNetworks.add(item);
             }
-            ((IConfigureWiFiActivity)activity).refreshWiFiList(mScanResults);
+            iConfigureWiFiActivity.refreshWiFiList(mScanResults);
         }
     }
 }

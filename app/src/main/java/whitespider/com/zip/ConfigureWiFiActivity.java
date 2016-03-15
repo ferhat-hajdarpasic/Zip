@@ -56,7 +56,7 @@ public class ConfigureWiFiActivity extends AppCompatActivity implements IConfigu
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configure_wi_fi);
-        WiFiBroadcastReceiver mWifiScanReceiver = new WiFiBroadcastReceiver(this);
+        WiFiBroadcastReceiver mWifiScanReceiver = new WiFiBroadcastReceiver(this, this);
         mWifiScanReceiver.startScan();
         arrayAdapter =new ArrayAdapter<WiFiContent.WiFiItem>(this.getApplicationContext(),
                         android.R.layout.simple_list_item_checked);

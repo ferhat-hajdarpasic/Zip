@@ -1,0 +1,94 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="whitespider.com.zip.InfoFragment"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="12">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Instructions for using this application:"
+            android:id="@+id/infoTextView"
+            android:layout_gravity="center_horizontal"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text=" 1) Ensure the HydroTaps Wi-Fi unit has been put into hotspot mode"
+            android:id="@+id/textView"
+            android:textAlignment="textStart"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="2) Connect the phone/tablet to the HydroTaps Wi-Fi hotspot using the credentials shown on the LCD screen"
+            android:id="@+id/textView2"
+            android:layout_row="2"
+            android:layout_column="1"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="3) Select an available SSID that the HydroTap will connect to"
+            android:id="@+id/textView3"
+            android:layout_row="3"
+            android:layout_column="1"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="4) Enter the corresponding password"
+            android:id="@+id/textView4"
+            android:layout_row="4"
+            android:layout_column="1"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="5) Enter the proxy details if needed"
+            android:id="@+id/textView5"
+            android:layout_row="5"
+            android:layout_column="1"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="6) Select the “Configure Wi-Fi” button"
+            android:id="@+id/textView6"
+            android:layout_row="6"
+            android:layout_column="1"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp" />
+    </GridLayout>
+</LinearLayout>
