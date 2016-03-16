@@ -15,8 +15,6 @@ import android.widget.ProgressBar;
 
 import java.util.List;
 
-import whitespider.com.ziptest.R;
-
 public class WiFiConnectCode {
     private static final String TAG = "WiFiConnectCode";
     private final WiFiNetworksListView mWiFiNetworksListView;
@@ -24,20 +22,21 @@ public class WiFiConnectCode {
     private WiFiContent.WiFiItem wiFiItem;
     private NetworkChangedReceiver networkChangedReceiver;
     private ProgressBar connectProgressBar;
+    private boolean tryToConnect;
 
-    public WiFiConnectCode(Fragment fragment, ProgressBar progressBar, WiFiNetworksListView wiFiNetworksListView) {
+    public WiFiConnectCode(Fragment fragment, WiFiNetworksListView wiFiNetworksListView) {
         mFragment = fragment;
-        connectProgressBar = progressBar;
         mWiFiNetworksListView = wiFiNetworksListView;
     }
     public void connect(WiFiContent.WiFiItem wiFiItem, String wiFiPassword, View view) {
+        this.wiFiItem = wiFiItem;
         WifiManager mWifiManager = (WifiManager) mFragment.getActivity().getSystemService(Context.WIFI_SERVICE);
         final WifiInfo connectionInfo = mWifiManager.getConnectionInfo();
-        if(connectionInfo.getSSID().equals(wiFiItem.ssid)) {
-            Log.d(TAG, "Already connected to : " + connectionInfo);
+        if(WiFiConnectCode.removeQuotedString(connectionInfo.getSSID()).equals(wiFiItem.ssid)) {
+            Log.d(TAG, "WiFi already selected for connection : " + connectionInfo);
+            mWiFiNetworksListView.setSelectedWiFiItem(this.wiFiItem);
         } else {
-            connectProgressBar.setVisibility(View.VISIBLE);
-            this.wiFiItem = wiFiItem;
+            //connectProgressBar.setVisibility(View.VISIBLE);
             if (networkChangedReceiver != null) {
                 mFragment.getActivity().unregisterReceiver(networkChangedReceiver);
             }
@@ -45,9 +44,11 @@ public class WiFiConnectCode {
             networkChangedReceiver = new NetworkChangedReceiver(this.wiFiItem, wiFiPassword, view);
             mFragment.getActivity().registerReceiver(networkChangedReceiver, new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION));
             mFragment.getActivity().registerReceiver(networkChangedReceiver, new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
-            mWiFiNetworksListView.setConnectedWiFiItem(this.wiFiItem);
+            mWiFiNetworksListView.setSelectedWiFiItem(this.wiFiItem);
 
             disconnectAP();
+
+            tryToConnect = true;
         }
     }
 
@@ -69,7 +70,7 @@ public class WiFiConnectCode {
         return "\"" + string + "\"";
     }
 
-    protected static String removeQuotedString(String string) {
+    public static String removeQuotedString(String string) {
         if(string.startsWith("\"") && string.endsWith("\"") && string.length() >= 3) {
             return string.substring(1, string.length() - 1);
         } else {
@@ -111,7 +112,7 @@ public class WiFiConnectCode {
             final String connectionInfoSSID = removeQuotedString(connectionInfo.getSSID());
             final String ssid = wiFiItem.ssid;
             if(connectionInfoSSID.equals(ssid)) {
-                mWiFiNetworksListView.setConnectedWiFiItem(wiFiItem);
+                mWiFiNetworksListView.setSelectedWiFiItem(wiFiItem);
                 mWiFiNetworksListView.indicateConnectingState(connectionInfo);
                 Log.d(TAG, "Connected to : " + connectionInfo);
             }
@@ -146,11 +147,13 @@ public class WiFiConnectCode {
                 }
                 final NetworkInfo.State state = networkInfo.getState();
                 if (state == NetworkInfo.State.CONNECTED) {
-                    connectProgressBar.setVisibility(View.GONE);
-                    connectProgressBar.setVisibility(View.INVISIBLE);
+//                    connectProgressBar.setVisibility(View.GONE);
+  //                  connectProgressBar.setVisibility(View.INVISIBLE);
                 } else if(state == NetworkInfo.State.DISCONNECTED) {
-                    //Toast.makeText(WiFiConnectCode.this.mActivity, "Existing WiFi Disconnected", Toast.LENGTH_SHORT).show();
-                    connectAP(wiFiItem, networkPass);
+                    if(tryToConnect) {
+                        connectAP(wiFiItem, networkPass);
+                        tryToConnect = false;
+                    }
                 } else {
                     int y = 90;
                 }

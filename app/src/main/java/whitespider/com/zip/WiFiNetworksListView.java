@@ -70,10 +70,10 @@ public class WiFiNetworksListView extends android.widget.ListView {
     }
 
     public void indicateConnectingState(NetworkInfo networkInfo) {
-        arrayAdapter.setConnectingState(networkInfo.getState().name());
+        arrayAdapter.setConnectingState(networkInfo.getState().name() + "/" + networkInfo.getDetailedState().name());
     }
 
-    public void setConnectedWiFiItem(WiFiContent.WiFiItem wiFiItem) {
-        arrayAdapter.setConnectedWiFiItem(wiFiItem);
+    public void setSelectedWiFiItem(WiFiContent.WiFiItem wiFiItem) {
+        arrayAdapter.setSelectedWiFiItem(wiFiItem);
     }
 }

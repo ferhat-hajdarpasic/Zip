@@ -7,6 +7,7 @@ import android.app.FragmentTransaction;
    
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
@@ -96,7 +97,10 @@ public class TabbedMainActivity extends Activity implements ActionBar.TabListene
 
         //noinspection SimplifiableIfStatement
 
-        return super.onOptionsItemSelected(item);
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }        return super.onOptionsItemSelected(item);
     }
 
     @Override

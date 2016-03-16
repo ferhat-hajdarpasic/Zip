@@ -73,6 +73,10 @@ public class MainActivity extends AppCompatActivity implements IConfigureWiFiAct
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
         if (id == R.id.action_config_wifi) {
             startActivity(new Intent(this, ConfigureWiFiActivity.class));
             return true;

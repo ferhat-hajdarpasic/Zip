@@ -71,7 +71,7 @@ public class ScanFragment extends Fragment implements IConfigureWiFiActivity {
             }
         });
 
-        connectCode = new WiFiConnectCode(this, wifiCollectProgressBar, mWiFiNetworksListView);
+        connectCode = new WiFiConnectCode(this, mWiFiNetworksListView);
         startScan();
         return view;
     }
@@ -200,7 +200,7 @@ public class ScanFragment extends Fragment implements IConfigureWiFiActivity {
 
     @Override
     public void refreshWiFiList(List<ScanResult> scanResults) {
-        String wiFiNamePrefix = getStringPreference(R.string.wifi_name_prefix, "ZIPD-");
+        String wiFiNamePrefix = getStringPreference(R.string.wifi_name_prefix, "ZIP-");
         List<WiFiContent.WiFiItem> filteredWiFiNetworks = mWiFiNetworksListView.getFilteredNetworks(scanResults, wiFiNamePrefix);
         mWiFiNetworksListView.refreshFromScanResult(filteredWiFiNetworks);
         connectCode.refreshConnectionDisplay(filteredWiFiNetworks);

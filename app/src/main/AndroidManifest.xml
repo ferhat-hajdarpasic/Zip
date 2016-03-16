@@ -35,7 +35,11 @@
             android:label="@string/title_activity_info" />
         <activity
             android:name="whitespider.com.zip.MainActivity"
-            android:label="@string/title_activity_tabbed_main"></activity>
+            android:label="@string/title_activity_tabbed_main"/>
+        <activity
+            android:name="whitespider.com.zip.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/Theme.AppCompat"/>
     </application>
 
 </manifest>

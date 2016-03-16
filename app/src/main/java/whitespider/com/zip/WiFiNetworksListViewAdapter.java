@@ -1,7 +1,8 @@
 package whitespider.com.zip;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatTextView;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  */
 public class WiFiNetworksListViewAdapter extends ArrayAdapter<WiFiContent.WiFiItem> {
     private static final String TAG = "WiFiNet...ViewAdapter";
-    private WiFiContent.WiFiItem mConnectedWiFiItem;
+    private WiFiContent.WiFiItem mselectedWiFiItem;
     private String connectingState;
 
     public WiFiNetworksListViewAdapter(Context context, int resource, ArrayList<WiFiContent.WiFiItem> wiFiItems) {
@@ -25,15 +26,24 @@ public class WiFiNetworksListViewAdapter extends ArrayAdapter<WiFiContent.WiFiIt
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final View view1 = super.getView(position, convertView, parent);
-        final TextView view = (TextView) view1;
+        final TextView view = (TextView) super.getView(position, convertView, parent);
         WiFiContent.WiFiItem thisItem = getItem(position);
-        if(this.mConnectedWiFiItem != null) {
-            if((connectingState != null) && thisItem.equals(mConnectedWiFiItem)) {
-                view.setText(Html.fromHtml(mConnectedWiFiItem.ssid + " - <font color=\"#E0711C\">" + connectingState + "</font>"));
+
+        WifiManager mWifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
+        final WifiInfo connectionInfo = mWifiManager.getConnectionInfo();
+        final String connectionInfoSSID = WiFiConnectCode.removeQuotedString(connectionInfo.getSSID());
+        final String ssid = thisItem.ssid;
+        if(connectionInfoSSID.equalsIgnoreCase(ssid)) {
+            connectingState = connectionInfo.getSupplicantState().name();
+            this.mselectedWiFiItem = thisItem;
+        }
+
+        if(this.mselectedWiFiItem != null) {
+            if((connectingState != null) && thisItem.equals(mselectedWiFiItem)) {
+                view.setText(Html.fromHtml(mselectedWiFiItem.ssid + " - <font color=\"#E0711C\">" + connectingState + "</font>"));
             }
         }
-        Log.d(TAG, "mConnectedWiFiItem=" + view.getText().toString());
+        Log.d(TAG, "mselectedWiFiItem=" + view.getText().toString());
         return view;
     }
 
@@ -42,8 +52,9 @@ public class WiFiNetworksListViewAdapter extends ArrayAdapter<WiFiContent.WiFiIt
         super.clear();
     }
 
-    public void setConnectedWiFiItem(WiFiContent.WiFiItem wiFiItem) {
-        this.mConnectedWiFiItem = wiFiItem;
+    public void setSelectedWiFiItem(WiFiContent.WiFiItem wiFiItem) {
+        this.mselectedWiFiItem = wiFiItem;
+        this.connectingState = null;
         this.notifyDataSetChanged();
     }
 

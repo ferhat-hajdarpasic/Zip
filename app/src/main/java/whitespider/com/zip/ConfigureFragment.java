@@ -267,7 +267,7 @@ public class ConfigureFragment extends Fragment implements IConfigureWiFiActivit
     @Override
     public void refreshWiFiList(List<ScanResult> mScanResults) {
         arrayAdapter.clear();
-        String wiFiNamePrefix = getStringPreference(R.string.wifi_name_prefix, "ZIPD-");
+        String wiFiNamePrefix = getStringPreference(R.string.wifi_name_prefix, "ZIP-");
         List<WiFiContent.WiFiItem> wiFiNetworks = new ArrayList<WiFiContent.WiFiItem>();
         for(int i = 0; i < mScanResults.size(); i++){
             final ScanResult scanResult = mScanResults.get(i);
