@@ -15,22 +15,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +35,8 @@ public class ConfigureFragment extends Fragment implements IConfigureWiFiActivit
     private ListView wiFiDomainsListView;
     private TextView hiddenDomain;
     private EditText wiFiPassword;
+    private EditText proxyPassword;
+    private EditText proxyHost;
     private RadioButton radioButtonSecurityTypeOpen;
     private RadioButton radioButtonSecurityTypeWep;
     private RadioButton radioButtonSecurityTypeWpa;
@@ -54,6 +47,10 @@ public class ConfigureFragment extends Fragment implements IConfigureWiFiActivit
     private ProgressBar broadcastProgressBar;
 
     private OnFragmentInteractionListener mListener;
+    private EditText proxyPort;
+    private EditText proxyUsername;
+    private ViewGroup configureProxySection;
+    private ViewGroup configureProxyUser;
 
     public ConfigureFragment() {
         // Required empty public constructor
@@ -81,6 +78,7 @@ public class ConfigureFragment extends Fragment implements IConfigureWiFiActivit
         wiFiDomainsListView = (ListView)view.findViewById(R.id.wiFiDomainsListView);
         hiddenDomain = (TextView) view.findViewById(R.id.editHiddenDomainText);
         createAndInitConfigPassword(view);
+        createAndInitProxy(view);
         radioButtonSecurityTypeOpen = (RadioButton)view.findViewById(R.id.securityTypeOpen);
         radioButtonSecurityTypeWep = (RadioButton)view.findViewById(R.id.securityTypeWep);
         radioButtonSecurityTypeWpa = (RadioButton)view.findViewById(R.id.securityTypeWpa);
@@ -191,6 +189,13 @@ public class ConfigureFragment extends Fragment implements IConfigureWiFiActivit
             }
         });
 
+        view.findViewById(R.id.checkBoxShowProxyPassword).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showProxyPasswordOnClick((CheckBox)v);
+            }
+        });
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -207,17 +212,23 @@ public class ConfigureFragment extends Fragment implements IConfigureWiFiActivit
                 Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
             }
         };
+
+        CheckBox checkboxConfigureProxy = (CheckBox)view.findViewById(R.id.checkboxConfigureProxy);
+        configureProxySection = (ViewGroup)view.findViewById(R.id.configureProxySection);
+        checkboxConfigureProxy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(((CheckBox)v).isChecked())  {
+                    configureProxySection.setVisibility(View.VISIBLE);
+                } else {
+                    configureProxySection.setVisibility(View.GONE);
+                }
+            }
+        });
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(
                 broadcastReceiver,
                 new IntentFilter(CONFIGURE_WIFI_EVENT));
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -249,19 +260,44 @@ public class ConfigureFragment extends Fragment implements IConfigureWiFiActivit
         wiFiPassword.setText(password);
     }
 
+    private void createAndInitProxy(View view) {
+        this.proxyHost = initFromPreference(view, R.id.editProxyHostText, R.string.zip_proxy_hostname);
+        this.proxyPort = initFromPreference(view, R.id.editProxyPortText, R.string.zip_proxy_port);
+        this.proxyUsername = initFromPreference(view, R.id.editProxyUsernameText, R.string.zip_proxy_username);
+        this.proxyPassword = initFromPreference(view, R.id.editProxyPasswordText, R.string.zip_proxy_password);
+    }
+
+    private EditText initFromPreference(View view, int widget_id, int preference_id) {
+        EditText editText = (EditText) view.findViewById(widget_id);
+        final String preferenceKey = getKey(preference_id);
+        String prefValue = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(preferenceKey, "");
+        editText.setText(prefValue);
+        return editText;
+    }
+
+
     @NonNull
     private String getKey(int zip_config_password) {
         Resources res = getResources();
         return res.getString(zip_config_password);
     }
 
-    private boolean saveNewConfigPasswordValue(TextView wiFiPassword) {
+    private boolean saveNewConfigValues() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = settings.edit();
-        Resources res = getResources();
-        final String key = getKey(R.string.zip_config_password);
-        editor.putString(key, wiFiPassword.getText().toString());
+
+        saveAsPreference(editor, R.string.zip_config_password, wiFiPassword);
+        saveAsPreference(editor, R.string.zip_proxy_hostname, proxyHost);
+        saveAsPreference(editor, R.string.zip_proxy_port, proxyPort);
+        saveAsPreference(editor, R.string.zip_proxy_username, proxyUsername);
+        saveAsPreference(editor, R.string.zip_proxy_password, proxyPassword);
+
         return editor.commit();
+    }
+
+    private void saveAsPreference(SharedPreferences.Editor editor, int zip_config_password, EditText wiFiPassword) {
+        final String key = getKey(zip_config_password);
+        editor.putString(key, wiFiPassword.getText().toString());
     }
 
     @Override
@@ -299,6 +335,14 @@ public class ConfigureFragment extends Fragment implements IConfigureWiFiActivit
     }
 
     public void showPasswordOnClick(CheckBox checkBox) {
+        handleShowHidePassword(checkBox, this.wiFiPassword);
+    }
+
+    public void showProxyPasswordOnClick(CheckBox checkBox) {
+        handleShowHidePassword(checkBox, this.proxyPassword);
+    }
+
+    private void handleShowHidePassword(CheckBox checkBox, EditText wiFiPassword) {
         if(checkBox.isChecked()) {
             wiFiPassword.setInputType(InputType.TYPE_CLASS_TEXT);
         } else {
@@ -326,12 +370,18 @@ public class ConfigureFragment extends Fragment implements IConfigureWiFiActivit
             securityType = 2;
         }
         intent.putExtra(TcpCommunicationIntentService.SECURITY_TYPE_KEY, securityType);
+        if(configureProxySection.getVisibility() == View.VISIBLE) {
+            intent.putExtra(TcpCommunicationIntentService.PROXY_HOST, this.proxyHost.getText().toString());
+            intent.putExtra(TcpCommunicationIntentService.PROXY_PORT, this.proxyPort.getText().toString());
+            intent.putExtra(TcpCommunicationIntentService.PROXY_USERNAME, this.proxyUsername.getText().toString());
+            intent.putExtra(TcpCommunicationIntentService.PROXY_PASSWORD, this.proxyPassword.getText().toString());
+        }
 
         getActivity().startService(intent);
 
         broadcastProgressBar.setVisibility(View.VISIBLE);
 
-        saveNewConfigPasswordValue(wiFiPassword);
+        saveNewConfigValues();
     }
 
     public String getStringPreference(int preferenceId, String defaultValue) {

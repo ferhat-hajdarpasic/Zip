@@ -98,4 +98,14 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
     <string name="title_activity_settings">Settings</string>
+    <string name="proxyHostLabelText">Proxy Host</string>
+    <string name="proxyPortLabelText">Proxy Port</string>
+    <string name="proxyUsernameLabelText">Proxy Username</string>
+    <string name="proxyPasswordLabelText">Proxy Password</string>
+    <string name="showProxyPassword">Show Proxy Password</string>
+    <string name="zip_proxy_password">zip_proxy_password</string>
+    <string name="zip_proxy_hostname">zip_proxy_hostname</string>
+    <string name="zip_proxy_port">zip_proxy_port</string>
+    <string name="zip_proxy_username">zip_proxy_username</string>
+    <string name="checkbox_configure_proxy">Configure Proxy</string>
 </resources>

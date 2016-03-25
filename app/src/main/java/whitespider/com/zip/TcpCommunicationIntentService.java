@@ -22,6 +22,10 @@ public class TcpCommunicationIntentService  extends IntentService {
     public static final String DOMAIN_KEY = "DOMAIN_KEY";
     public static final String PASSWORD_KEY ="PASSWORD_KEY";
     public static final String SECURITY_TYPE_KEY = "SECURITY_TYPE_KEY";
+    public static final String PROXY_HOST = "PROXY_HOST";
+    public static final String PROXY_PORT = "PROXY_PORT";
+    public static final String PROXY_USERNAME = "PROXY_USERNAME";
+    public static final String PROXY_PASSWORD = "PROXY_PASSWORD";
 
     public TcpCommunicationIntentService() {
         super("TCP COMMS");
@@ -32,11 +36,19 @@ public class TcpCommunicationIntentService  extends IntentService {
         String domain = intent.getStringExtra(DOMAIN_KEY);
         String password = intent.getStringExtra(PASSWORD_KEY);
         int securityType = intent.getIntExtra(SECURITY_TYPE_KEY, -1);
+        String proxyHostname = intent.getStringExtra(PROXY_HOST);
+        String proxyPort = intent.getStringExtra(PROXY_PORT);
+        String proxyUsername = intent.getStringExtra(PROXY_USERNAME);
+        String proxyPassword = intent.getStringExtra(PROXY_PASSWORD);
 
         ConfigureWiFiCommand command = new ConfigureWiFiCommand();
         command.Domain = domain;
         command.Password = password;
         command.SecurityType = securityType;
+        command.proxyHostname = proxyHostname;
+        command.proxyPort = proxyPort;
+        command.proxyUsername = proxyUsername;
+        command.proxyPassword = proxyPassword;
 
         sendWiFiCommand(command);
     }

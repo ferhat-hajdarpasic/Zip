@@ -41,4 +41,32 @@
         android:inputType="textPassword"
         android:persistent="true"
         android:title="ZIP WiFi Password"/>
+    <EditTextPreference
+            android:key="@string/zip_proxy_hostname"
+            android:maxLines="1"
+            android:defaultValue=""
+            android:inputType="text"
+            android:persistent="true"
+            android:title="Proxy Hostname"/>
+    <EditTextPreference
+            android:key="@string/zip_proxy_port"
+            android:maxLines="1"
+            android:defaultValue=""
+            android:inputType="number"
+            android:persistent="true"
+            android:title="Proxy Port"/>
+    <EditTextPreference
+            android:key="@string/zip_proxy_username"
+            android:maxLines="1"
+            android:defaultValue=""
+            android:inputType="text"
+            android:persistent="true"
+            android:title="Proxy Username"/>
+    <EditTextPreference
+            android:key="@string/zip_proxy_password"
+            android:maxLines="1"
+            android:defaultValue=""
+            android:inputType="textPassword"
+            android:persistent="true"
+            android:title="Proxy Password"/>
 </PreferenceScreen>
